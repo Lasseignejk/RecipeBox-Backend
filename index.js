@@ -6,7 +6,10 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 3060;
 const connectDB = require("./database")
-const Task = require('./models/test')
+const userRoutes = require("./routes/userRoutes")
+const recipeRoutes = require("./routes/recipeRoutes")
+const User = require("./models/user");
+const Recipe = require("./models/recipe");
 
 app.use(express.json());
 app.use(cors());
@@ -16,30 +19,24 @@ app.use(
 	})
 );
 
+app.use("/user", userRoutes)
+app.use("/recipe", recipeRoutes)
 
-app.post("/newTask", async (req, res) => {
+
+
+
+app.get("/getRecipe", async (req,res) => {
     const {name} = await req.body
-    
     try {
         await connectDB();
-        const alreadyExists = await Task.findOne({name: name})
-        console.log(alreadyExists)
-        if (alreadyExists == null) {
-            const newTask = new Task({
-                name: name
-            })
-            await newTask.save()
-            res.status(200).send(newTask)
-        } else {
-            res.send("already exists")
+        const findRecipe = await Recipe.findOne({name:name}).populate('author');
+        if (findRecipe != null) {
+            res.send(`The author of this recipe is ${findRecipe.author.username}`)
         }
-
     } catch (error) {
-        res.send("Failed to create new task", { status: 500 });
+        res.send("Failed to get recipe", error)
     }
-
 })
-
 
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`));

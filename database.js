@@ -1,15 +1,22 @@
 const mongoose = require("mongoose")
 
+let isConnected = false
+
 const connectDB = async () => {
+    if (isConnected) {
+        console.log("Mongo is already connected")
+        return
+    }
     try {
         const conn = await mongoose.connect(process.env.MONGODB_URI, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-});
-console.log(`MongoDB Connected: ${conn.connection.host}`)
+            dbName: "RecipeBox",
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        isConnected = true
+        console.log(`MongoDB Connected: ${conn.connection.host}`)
     } catch (error) {
         console.error(error.message)
-        process.exit(1)
     }
 }
 
