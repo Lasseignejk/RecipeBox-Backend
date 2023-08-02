@@ -17,21 +17,23 @@ router.use(bodyParser.json());
 
 // new recipe
 router.post("/new", async (req, res) => {
-	const { name, email } = await req.body;
+	const email = "test@email.com"
+	const { recipe_name } = await req.body;
+	console.log(recipe_name)
 	try {
 		await connectDB();
-		const recipeAlreadyExists = await Recipe.findOne({ name: name });
+		const recipeAlreadyExists = await Recipe.findOne({ recipe_name });
 		const findAuthor = await User.findOne({ email: email });
 		console.log(recipeAlreadyExists);
 		if (recipeAlreadyExists == null) {
 			const newRecipe = new Recipe({
-				name: name,
+				recipe_name,
 				author: findAuthor._id,
 			});
 			await newRecipe.save();
 			res.send(newRecipe);
 		} else {
-			res.send(`A recipe with the name ${name} already exists.`);
+			res.send(`A recipe with the name ${recipe_name} already exists.`);
 		}
 	} catch (error) {
 		res.send("Failed to create new recipe" + error);
@@ -40,15 +42,15 @@ router.post("/new", async (req, res) => {
 
 // get recipe 
 router.get("/get", async (req, res) => {
-	const { name } = await req.body;
+	const { recipe_name } = await req.body;
 	try {
 		await connectDB();
-		const findRecipe = await Recipe.findOne({ name: name }).populate(
+		const findRecipe = await Recipe.findOne({ recipe_name }).populate(
 			"author"
 		);
 		if (findRecipe != null) {
 			res.send(
-				`The name of this recipe is ${findRecipe.name} and the author of this recipe is ${findRecipe.author.username}`
+				`The name of this recipe is ${findRecipe.recipe_name} and the author of this recipe is ${findRecipe.author.username}`
 			);
 		}
 	} catch (error) {

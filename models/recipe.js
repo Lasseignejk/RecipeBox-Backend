@@ -1,7 +1,7 @@
 const {Schema, model, models} = require("mongoose")
 
 const RecipeSchema = new Schema({
-    name: {
+    recipe_name: {
         type: String,
         required: [true, "Please enter a name for your recipe."],
     },
