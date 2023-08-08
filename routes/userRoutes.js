@@ -21,7 +21,6 @@ router.post("/new", async (req,res) => {
 	try {
 		await connectDB();
 		const alreadyExists = await User.findOne({email: email})
-		console.log(alreadyExists)
 		if (alreadyExists == null) {
 		const newUser = new User({
 			email: email,
@@ -36,6 +35,32 @@ router.post("/new", async (req,res) => {
 		res.send(error);
 	}
 })
+
+// check if user exists. if not: add them. if yes: update them.
+router.post("/check", async (req, res) => {
+	const { email, username, nickname, picture } = await req.body;
+
+	try {
+		await connectDB();
+		const alreadyExists = await User.findOne({ email: email });
+		if (alreadyExists == null) {
+			const newUser = new User({
+				email,
+				username,
+				nickname,
+				picture
+			});
+			await newUser.save();
+			res.send(newUser);
+		} else {
+			const updateUser = await User.findOneAndUpdate({email: email}, {username, nickname, picture}, {new: true})
+
+			res.send(updateUser)
+		}
+	} catch (error) {
+		res.send(error);
+	}
+});
 
 
 module.exports = router;
