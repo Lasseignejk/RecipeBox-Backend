@@ -18,8 +18,20 @@ router.use(bodyParser.json());
 // new recipe
 router.post("/new", async (req, res) => {
 	const email = "test@email.com"
-	const { recipe_name } = await req.body;
-	console.log(recipe_name)
+	const {
+		recipe_name,
+		prep_time,
+		cook_time,
+		total_time,
+		servings,
+		category,
+		source,
+		ingredients,
+		instructions,
+		notes,
+		tags
+	} = await req.body;
+	console.log(ingredients)
 	try {
 		await connectDB();
 		const recipeAlreadyExists = await Recipe.findOne({ recipe_name });
@@ -29,6 +41,16 @@ router.post("/new", async (req, res) => {
 			const newRecipe = new Recipe({
 				recipe_name,
 				author: findAuthor._id,
+				prep_time,
+				cook_time,
+				total_time,
+				servings,
+				category,
+				source,
+				ingredients,
+				instructions,
+				notes,
+				tags
 			});
 			await newRecipe.save();
 			res.send(newRecipe);
@@ -42,7 +64,10 @@ router.post("/new", async (req, res) => {
 
 // get recipe 
 router.get("/get", async (req, res) => {
-	const { recipe_name } = await req.body;
+	const { 
+		recipe_name,
+
+	 } = await req.body;
 	try {
 		await connectDB();
 		const findRecipe = await Recipe.findOne({ recipe_name }).populate(
