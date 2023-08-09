@@ -17,7 +17,6 @@ router.use(bodyParser.json());
 
 // new recipe
 router.post("/new", async (req, res) => {
-	const email = "test@email.com"
 	const {
 		recipe_name,
 		prep_time,
@@ -29,14 +28,15 @@ router.post("/new", async (req, res) => {
 		ingredients,
 		instructions,
 		notes,
-		tags
+		tags,
+		_id
 	} = await req.body;
-	console.log(ingredients)
 	try {
 		await connectDB();
 		const recipeAlreadyExists = await Recipe.findOne({ recipe_name });
-		const findAuthor = await User.findOne({ email: email });
-		console.log(recipeAlreadyExists);
+
+		const findAuthor = await User.findOne({ _id });
+
 		if (recipeAlreadyExists == null) {
 			const newRecipe = new Recipe({
 				recipe_name,

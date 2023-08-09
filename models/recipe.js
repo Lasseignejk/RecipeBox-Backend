@@ -42,7 +42,7 @@ const RecipeSchema = new Schema({
         instruction: {type: String}
     }],
     notes: {type: String},
-    tags:[{type: String}]
+    tags:[{type: String}],
 })
 
 const Recipe = models.Recipe || model("Recipe", RecipeSchema)
