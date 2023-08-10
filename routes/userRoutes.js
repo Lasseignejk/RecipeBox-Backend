@@ -54,13 +54,13 @@ router.post("/check", async (req, res) => {
 			res.send(newUser);
 		} else {
 			const updateUser = await User.findOneAndUpdate({email: email}, {username, nickname, picture}, {new: true})
-			console.log("user found")
 			res.send(updateUser)
 		}
 	} catch (error) {
 		res.send(error);
 	}
 });
+
 
 
 module.exports = router;

@@ -25,18 +25,18 @@ app.use("/recipe", recipeRoutes)
 
 
 
-app.get("/getRecipe", async (req,res) => {
-    const {name} = await req.body
-    try {
-        await connectDB();
-        const findRecipe = await Recipe.findOne({name:name}).populate('author');
-        if (findRecipe != null) {
-            res.send(`The author of this recipe is ${findRecipe.author.username}`)
-        }
-    } catch (error) {
-        res.send("Failed to get recipe", error)
-    }
-})
+// app.get("/getRecipe", async (req,res) => {
+//     const {name} = await req.body
+//     try {
+//         await connectDB();
+//         const findRecipe = await Recipe.findOne({name:name}).populate('author');
+//         if (findRecipe != null) {
+//             res.send(`The author of this recipe is ${findRecipe.author.username}`)
+//         }
+//     } catch (error) {
+//         res.send("Failed to get recipe", error)
+//     }
+// })
 
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`));

@@ -83,5 +83,11 @@ router.get("/get", async (req, res) => {
 	}
 });
 
+router.get("/user/:id", async (req,res) => {
+	const id = req.params.id
+	console.log("the userId is", id)
+	res.send(id)
+})
+
 
 module.exports = router;
