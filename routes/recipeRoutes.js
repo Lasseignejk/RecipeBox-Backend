@@ -83,10 +83,18 @@ router.get("/get", async (req, res) => {
 	}
 });
 
+// find the user's recipes
 router.get("/user/:id", async (req,res) => {
 	const id = req.params.id
-	console.log("the userId is", id)
-	res.send(id)
+	try {
+		await connectDB();
+		const userRecipes = await Recipe.find({author: id}).exec()
+		if (userRecipes != null) {
+			res.send(userRecipes)
+		}
+	} catch (error) {
+		res.send("Failed to fetch all recipes", error)
+	}
 })
 
 
