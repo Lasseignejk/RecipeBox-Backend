@@ -62,7 +62,7 @@ router.post("/new", async (req, res) => {
 	}
 });
 
-// get recipe 
+// get recipe, return author
 router.get("/get", async (req, res) => {
 	const { 
 		recipe_name,
@@ -82,6 +82,44 @@ router.get("/get", async (req, res) => {
 		res.send("Failed to get recipe", error);
 	}
 });
+
+// get one recipe
+router.get("/getOne/:id", async (req, res) => {
+	const id = req.params.id;
+	console.log(id)
+	try {
+		await connectDB();
+		const findRecipe = await Recipe.findOne({ _id: id})
+		if (findRecipe != null) {
+			console.log("Recipe Found")
+			res.send(findRecipe);
+		}
+	} catch (error) {
+		res.send("Failed to get recipe", error);
+	}
+});
+
+//update one recipe 
+router.post("/update/:id", async (req,res) => {
+	const id = req.params.id;
+	const {
+		recipe_name, prep_time, cook_time, total_time, servings, category, source, ingredients, instructions, notes, tags, _id, author
+	} = await req.body
+	try {
+		await connectDB();
+		const findAuthor = await User.findOne({_id: author})
+
+		if (findAuthor != null) {
+			const filter = {_id}
+			const update = {recipe_name, prep_time, cook_time, total_time, servings, category, source, ingredients, instructions, notes, tags}
+			const updatedRecipe = await Recipe.findOneAndUpdate(filter, update, {new: true})
+			res.send(updatedRecipe)
+		}
+	} catch (error) {
+		res.send(error)
+	}
+
+})
 
 // find the user's recipes
 router.get("/user/:id", async (req,res) => {
