@@ -29,6 +29,7 @@ router.post("/new", async (req, res) => {
 		instructions,
 		notes,
 		tags,
+		img,
 		_id
 	} = await req.body;
 	try {
@@ -50,7 +51,8 @@ router.post("/new", async (req, res) => {
 				ingredients,
 				instructions,
 				notes,
-				tags
+				tags,
+				img
 			});
 			await newRecipe.save();
 			res.send(newRecipe);
@@ -103,7 +105,7 @@ router.get("/getOne/:id", async (req, res) => {
 router.post("/update/:id", async (req,res) => {
 	const id = req.params.id;
 	const {
-		recipe_name, prep_time, cook_time, total_time, servings, category, source, ingredients, instructions, notes, tags, _id, author
+		recipe_name, prep_time, cook_time, total_time, servings, category, source, ingredients, instructions, img, notes, tags, _id, author
 	} = await req.body
 	try {
 		await connectDB();
@@ -111,7 +113,7 @@ router.post("/update/:id", async (req,res) => {
 
 		if (findAuthor != null) {
 			const filter = {_id}
-			const update = {recipe_name, prep_time, cook_time, total_time, servings, category, source, ingredients, instructions, notes, tags}
+			const update = {recipe_name, prep_time, cook_time, total_time, servings, category, source, ingredients, instructions, notes, tags, img}
 			const updatedRecipe = await Recipe.findOneAndUpdate(filter, update, {new: true})
 			res.send(updatedRecipe)
 		}

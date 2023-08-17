@@ -16,6 +16,9 @@ const RecipeSchema = new Schema({
     cook_time: {
         type: String,
     },
+    img: {
+        type: String,
+    },
     total_time: {
         type: String,
     },
