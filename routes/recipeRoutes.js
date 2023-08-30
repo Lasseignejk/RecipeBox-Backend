@@ -97,7 +97,7 @@ router.get("/getOne/:id", async (req, res) => {
 			res.send(findRecipe);
 		}
 	} catch (error) {
-		res.send("Failed to get recipe", error);
+		res.send(error);
 	}
 });
 
