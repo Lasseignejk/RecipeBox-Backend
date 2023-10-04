@@ -36,6 +36,23 @@ router.post("/new", async (req,res) => {
 	}
 })
 
+router.get("/tags/:id", async (req, res) => {
+	const id = req.params.id;
+	console.log(id)
+
+	try {
+		await connectDB();
+		const findUser = await User.findOne({_id: id})
+		if (findUser != null) {
+			console.log("User Found")
+			res.send(findUser.tags)
+		}
+		
+	} catch (error) {
+		res.send(error)
+	}
+})
+
 // check if user exists. if not: add them. if yes: update them.
 router.post("/check", async (req, res) => {
 	const { email, username, nickname, picture } = await req.body;
